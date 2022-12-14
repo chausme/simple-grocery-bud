@@ -1,6 +1,5 @@
 const form = document.querySelector('.grocery-form');
-
-// const clearBtn = document.querySelector('.clear-btn');
+const clearBtn = document.querySelector('.clear-btn');
 
 // hide info message
 
@@ -48,7 +47,7 @@ const addToLocalStorage = (id, value) => {
     console.log(`Grocery item "${value}" with id "${id}" has been added to local storage`);
 };
 
-// set back to default
+// reset to form defaults
 
 const setDefaultState = () => {
     console.log('Set back to default');
@@ -57,6 +56,8 @@ const setDefaultState = () => {
     const submitBtn = form.querySelector('button');
     submitBtn.textContent = 'Submit';
 };
+
+// process form submission
 
 form.addEventListener('submit', e => {
     e.preventDefault();
@@ -73,6 +74,7 @@ form.addEventListener('submit', e => {
     if (grocery && action === 'add') {
         const element = document.createElement('article');
         const uuid = new Date().getTime().toString();
+        const container = document.querySelector('.grocery-container');
         const list = document.querySelector('.grocery-list');
         element.classList.add('grocery-item');
         element.dataset.id = uuid;
@@ -88,7 +90,7 @@ form.addEventListener('submit', e => {
             </div>
         `;
         list.appendChild(element);
-        list.classList.add('visible');
+        container.classList.add('visible');
         addToLocalStorage(uuid, grocery);
         setDefaultState();
         outputInfo('Succesfully added grocery item', 'success');
@@ -98,4 +100,19 @@ form.addEventListener('submit', e => {
     } else {
         outputInfo('Oops, the grocery value is empty', 'error');
     }
+});
+
+// clear grocery list
+
+clearBtn.addEventListener('click', e => {
+    const container = document.querySelector('.grocery-container');
+    const list = document.querySelector('.grocery-list');
+    const items = document.querySelectorAll('.grocery-item');
+    if (items.length) {
+        items.forEach(item => {
+            list.removeChild(item);
+        });
+    }
+    container.classList.remove('visible');
+    setDefaultState();
 });
