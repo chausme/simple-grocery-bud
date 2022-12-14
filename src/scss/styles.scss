@@ -43,6 +43,7 @@ main {
 
 .grocery-item {
     display: flex;
+    margin-bottom: 12px;
 
     .title {
         flex: 0 0 calc(100% - 64px);

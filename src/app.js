@@ -1,6 +1,5 @@
 const form = document.querySelector('.grocery-form');
 
-// const list = document.querySelector('.grocery-list');
 // const clearBtn = document.querySelector('.clear-btn');
 
 // hide info message
@@ -54,14 +53,29 @@ form.addEventListener('submit', e => {
     const { action } = e.target.dataset;
 
     // generate id based on timestamp
-    const id = new Date().getTime().toString();
 
     if (grocery && action === 'add') {
+        const element = document.createElement('article');
+        const uuid = new Date().getTime().toString();
+        const list = document.querySelector('.grocery-list');
+        element.classList.add('grocery-item');
+        element.dataset.id = uuid;
+        element.innerHTML = `
+            <p class="title">${grocery}</p>
+            <div class="actions">
+                <button type="button" class="btn edit p-0">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button type="button" class="btn delete p-0 ms-3">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `;
+        list.appendChild(element);
+        list.classList.add('visible');
         outputInfo('Succesfully added grocery item', 'success');
-        console.log('add item');
     } else if (grocery && action === 'edit') {
         outputInfo('Succesfully updated grocery item', 'success');
-        console.log('edit item');
     } else {
         outputInfo('Oops, the grocery value is empty', 'error');
     }
