@@ -42,6 +42,22 @@ const outputInfo = (message, type) => {
     }, 3000);
 };
 
+// add to local storage
+
+const addToLocalStorage = (id, value) => {
+    console.log(`Grocery item "${value}" with id "${id}" has been added to local storage`);
+};
+
+// set back to default
+
+const setDefaultState = () => {
+    console.log('Set back to default');
+    form.reset();
+    form.dataset.action = 'add';
+    const submitBtn = form.querySelector('button');
+    submitBtn.textContent = 'Submit';
+};
+
 form.addEventListener('submit', e => {
     e.preventDefault();
     const submitBtn = e.target.querySelector('button');
@@ -73,9 +89,12 @@ form.addEventListener('submit', e => {
         `;
         list.appendChild(element);
         list.classList.add('visible');
+        addToLocalStorage(uuid, grocery);
+        setDefaultState();
         outputInfo('Succesfully added grocery item', 'success');
     } else if (grocery && action === 'edit') {
         outputInfo('Succesfully updated grocery item', 'success');
+        setDefaultState();
     } else {
         outputInfo('Oops, the grocery value is empty', 'error');
     }
