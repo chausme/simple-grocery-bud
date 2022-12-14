@@ -1,11 +1,40 @@
 @import 'variables';
 
+:root {
+    --transition: all 0.3s linear;
+}
+
 body {
     @media screen and (min-width: $screen-md) {
         min-height: 100vh;
         display: flex;
         align-items: center;
     }
+}
+
+main {
+    margin: 80px 0 60px 0;
+    @media screen and (min-width: $screen-md) {
+        margin: 60px 0 60px 0;
+    }
+}
+
+.info-wrap {
+    position: fixed;
+    top: 20px;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+
+    &.active {
+        opacity: 1;
+    }
+}
+
+.info {
+    width: 100%;
+    text-align: center;
 }
 
 .grocery-container {
