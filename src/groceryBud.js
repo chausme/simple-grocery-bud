@@ -45,6 +45,10 @@ class GroceryBud {
                         </button>
                     </div>
                 `;
+                const editBtn = element.querySelector('.edit');
+                const deleteBtn = element.querySelector('.delete');
+                editBtn.addEventListener('click', this.#editItem);
+                deleteBtn.addEventListener('click', this.#deleteItem);
                 list.appendChild(element);
                 container.classList.add('visible');
                 this.#grocery.id = uuid;
@@ -62,18 +66,7 @@ class GroceryBud {
 
         // clear grocery list
 
-        this.#clearBtn.addEventListener('click', () => {
-            const container = document.querySelector('.grocery-container');
-            const list = document.querySelector('.grocery-list');
-            const items = document.querySelectorAll('.grocery-item');
-            if (items.length) {
-                items.forEach(item => {
-                    list.removeChild(item);
-                });
-            }
-            container.classList.remove('visible');
-            this.#setDefaultState();
-        });
+        this.#clearBtn.addEventListener('click', () => this.#clearItems());
     };
 
     // hide info message
@@ -120,6 +113,40 @@ class GroceryBud {
         // remove grocery data from property
         this.#grocery.id = '';
         this.#grocery.name = '';
+    };
+
+    // edit item
+
+    #editItem() {
+        const itemEl = this.closest('.grocery-item');
+        const itemId = itemEl.dataset.id;
+        console.log(`item ${itemId} edited`);
+    }
+
+    // delete item
+
+    #deleteItem() {
+        const itemEl = this.closest('.grocery-item');
+        const itemId = itemEl.dataset.id;
+        console.log(`item ${itemId} deleted`);
+    }
+
+    // remove items
+
+    #clearItems = () => {
+        const container = document.querySelector('.grocery-container');
+        const list = document.querySelector('.grocery-list');
+        const items = document.querySelectorAll('.grocery-item');
+        if (items.length) {
+            items.forEach(item => {
+                list.removeChild(item);
+            });
+        }
+        container.classList.remove('visible');
+        this.#outputInfo('Heads up, your list is empty now', 'error');
+        this.#setDefaultState();
+
+        // localStorage.removeItem('list');
     };
 
     // reset to form defaults
