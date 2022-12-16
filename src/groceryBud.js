@@ -50,13 +50,13 @@ class GroceryBud {
                 deleteBtn.addEventListener('click', this.#deleteItem);
                 list.appendChild(element);
                 container.classList.add('visible');
-                this.constructor.#addToLocalStorage(uuid, grocery);
+                this.#addToLocalStorage(uuid, grocery);
                 this.#setDefaultState();
                 this.#outputInfo('Succesfully added grocery item', 'success');
             } else if (grocery && action === 'edit') {
                 list.querySelector(`.grocery-item[data-id="${this.#editId}"] .title`).textContent =
                     this.#getGrocery();
-                // update the item inside local storage
+                this.#updateInLocalStorage(this.#editId);
                 this.#setDefaultState();
                 this.#outputInfo('Succesfully updated grocery item', 'success');
             } else {
@@ -108,15 +108,36 @@ class GroceryBud {
 
     // add to local storage
 
-    static #addToLocalStorage = (id, name) => {
-        console.log(`Grocery item "${name}" with id "${id}" has been added to local storage`);
+    #addToLocalStorage = (id, name) => {
+        const items = localStorage.getItem('list') ? this.constructor.#getLocalStorage() : [];
+        items.push({ id, name });
+        localStorage.setItem('list', JSON.stringify(items));
     };
 
     // remove from local storage
 
-    static #removeFromLocalStorage = id => {
-        console.log(`Grocery item with id "${id}" has been removed from local storage`);
+    #removeFromLocalStorage = id => {
+        const items = this.constructor.#getLocalStorage();
+        localStorage.setItem('list', JSON.stringify(items.filter(item => item.id !== id)));
     };
+
+    // update in local storage
+
+    #updateInLocalStorage = id => {
+        const items = this.constructor.#getLocalStorage();
+        localStorage.setItem(
+            'list',
+            JSON.stringify(
+                items.map(item =>
+                    item.id === id ? { ...item, name: this.#getGrocery() } : { ...item }
+                )
+            )
+        );
+    };
+
+    // get local storage
+
+    static #getLocalStorage = () => JSON.parse(localStorage.getItem('list'));
 
     // edit item
 
@@ -142,7 +163,7 @@ class GroceryBud {
         itemEl.remove();
 
         // check for list length and hide the list if there are no items
-        this.constructor.#removeFromLocalStorage(itemId);
+        this.#removeFromLocalStorage(itemId);
         this.#outputInfo(`Item ${itemId} has been removed`, 'success');
         this.#setDefaultState();
     };
@@ -161,14 +182,14 @@ class GroceryBud {
         container.classList.remove('visible');
         this.#outputInfo('Heads up, your list is empty now', 'error');
         this.#setDefaultState();
-
-        // localStorage.removeItem('list');
+        localStorage.removeItem('list');
     };
 
     // reset to form defaults
 
     #setDefaultState = () => {
         console.log('Set back to default');
+        this.#editId = null;
         this.#form.reset();
         this.#form.dataset.action = 'add';
         this.#submitBtn.textContent = 'Submit';
