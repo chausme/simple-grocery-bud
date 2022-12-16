@@ -1,9 +1,15 @@
 class GroceryBud {
     #form = document.querySelector('.grocery-form');
+
     #submitBtn = this.#form.querySelector('button');
+
     #clearBtn = document.querySelector('.clear-btn');
+
     #infoWrap = document.querySelector('.info-wrap');
+
     #info = this.#infoWrap.querySelector('.info');
+
+    #grocery = {};
 
     // init
 
@@ -41,7 +47,9 @@ class GroceryBud {
                 `;
                 list.appendChild(element);
                 container.classList.add('visible');
-                this.#addToLocalStorage(uuid, grocery);
+                this.#grocery.id = uuid;
+                this.#grocery.name = grocery;
+                this.#addToLocalStorage();
                 this.#setDefaultState();
                 this.#outputInfo('Succesfully added grocery item', 'success');
             } else if (grocery && action === 'edit') {
@@ -54,7 +62,7 @@ class GroceryBud {
 
         // clear grocery list
 
-        this.#clearBtn.addEventListener('click', e => {
+        this.#clearBtn.addEventListener('click', () => {
             const container = document.querySelector('.grocery-container');
             const list = document.querySelector('.grocery-list');
             const items = document.querySelectorAll('.grocery-item');
@@ -103,8 +111,15 @@ class GroceryBud {
 
     // add to local storage
 
-    #addToLocalStorage = (id, value) => {
-        console.log(`Grocery item "${value}" with id "${id}" has been added to local storage`);
+    #addToLocalStorage = () => {
+        console.log(
+            `Grocery item "${this.#grocery.name}" with id "${
+                this.#grocery.id
+            }" has been added to local storage`
+        );
+        // remove grocery data from property
+        this.#grocery.id = '';
+        this.#grocery.name = '';
     };
 
     // reset to form defaults
