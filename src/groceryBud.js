@@ -9,6 +9,8 @@ class GroceryBud {
 
     #info = this.#infoWrap.querySelector('.info');
 
+    #editId;
+
     // init
 
     init = () => {
@@ -16,20 +18,19 @@ class GroceryBud {
 
         this.#form.addEventListener('submit', e => {
             e.preventDefault();
-            const formData = new FormData(e.target);
-            const grocery = formData.get('grocery');
 
             this.#submitBtn.setAttribute('disabled', 'disabled');
 
             const { action } = e.target.dataset;
+            const grocery = this.#getGrocery();
 
-            // generate id based on timestamp
+            const list = document.querySelector('.grocery-list');
 
             if (grocery && action === 'add') {
                 const element = document.createElement('article');
+                // generate id based on timestamp
                 const uuid = new Date().getTime().toString();
                 const container = document.querySelector('.grocery-container');
-                const list = document.querySelector('.grocery-list');
                 element.classList.add('grocery-item');
                 element.dataset.id = uuid;
                 element.innerHTML = `
@@ -53,8 +54,11 @@ class GroceryBud {
                 this.#setDefaultState();
                 this.#outputInfo('Succesfully added grocery item', 'success');
             } else if (grocery && action === 'edit') {
-                this.#outputInfo('Succesfully updated grocery item', 'success');
+                list.querySelector(`.grocery-item[data-id="${this.#editId}"] .title`).textContent =
+                    this.#getGrocery();
+                // update the item inside local storage
                 this.#setDefaultState();
+                this.#outputInfo('Succesfully updated grocery item', 'success');
             } else {
                 this.#outputInfo('Oops, the grocery value is empty', 'error');
             }
@@ -64,6 +68,10 @@ class GroceryBud {
 
         this.#clearBtn.addEventListener('click', () => this.#clearItems());
     };
+
+    // get grocery
+
+    #getGrocery = () => new FormData(this.#form).get('grocery');
 
     // hide info message
 
@@ -114,21 +122,16 @@ class GroceryBud {
 
     #editItem = e => {
         const itemEl = e.target.closest('.grocery-item');
+        const itemId = itemEl.dataset.id;
+        const title = itemEl.querySelector('.title').textContent;
 
-        //const itemId = itemEl.dataset.id;
-
-        const titleEl = itemEl.querySelector('.title');
-        const title = titleEl.textContent;
+        this.#editId = itemId;
 
         // update form input and button
 
         this.#submitBtn.textContent = 'Edit';
         this.#form.querySelector('input').value = title;
         this.#form.dataset.action = 'edit';
-
-        // update the item inside local storage
-
-        //this.#setDefaultState();
     };
 
     // delete item
