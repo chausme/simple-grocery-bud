@@ -57,3 +57,9 @@ main {
         text-align: right;
     }
 }
+
+.grocery-form {
+    button[type='submit'] {
+        min-width: 80px;
+    }
+}

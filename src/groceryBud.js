@@ -9,8 +9,6 @@ class GroceryBud {
 
     #info = this.#infoWrap.querySelector('.info');
 
-    #grocery = {};
-
     // init
 
     init = () => {
@@ -51,9 +49,7 @@ class GroceryBud {
                 deleteBtn.addEventListener('click', this.#deleteItem);
                 list.appendChild(element);
                 container.classList.add('visible');
-                this.#grocery.id = uuid;
-                this.#grocery.name = grocery;
-                this.#addToLocalStorage();
+                this.constructor.#addToLocalStorage(uuid, grocery);
                 this.#setDefaultState();
                 this.#outputInfo('Succesfully added grocery item', 'success');
             } else if (grocery && action === 'edit') {
@@ -104,32 +100,49 @@ class GroceryBud {
 
     // add to local storage
 
-    #addToLocalStorage = () => {
-        console.log(
-            `Grocery item "${this.#grocery.name}" with id "${
-                this.#grocery.id
-            }" has been added to local storage`
-        );
-        // remove grocery data from property
-        this.#grocery.id = '';
-        this.#grocery.name = '';
+    static #addToLocalStorage = (id, name) => {
+        console.log(`Grocery item "${name}" with id "${id}" has been added to local storage`);
+    };
+
+    // remove from local storage
+
+    static #removeFromLocalStorage = id => {
+        console.log(`Grocery item with id "${id}" has been removed from local storage`);
     };
 
     // edit item
 
-    #editItem() {
-        const itemEl = this.closest('.grocery-item');
-        const itemId = itemEl.dataset.id;
-        console.log(`item ${itemId} edited`);
-    }
+    #editItem = e => {
+        const itemEl = e.target.closest('.grocery-item');
+
+        //const itemId = itemEl.dataset.id;
+
+        const titleEl = itemEl.querySelector('.title');
+        const title = titleEl.textContent;
+
+        // update form input and button
+
+        this.#submitBtn.textContent = 'Edit';
+        this.#form.querySelector('input').value = title;
+        this.#form.dataset.action = 'edit';
+
+        // update the item inside local storage
+
+        //this.#setDefaultState();
+    };
 
     // delete item
 
-    #deleteItem() {
-        const itemEl = this.closest('.grocery-item');
+    #deleteItem = e => {
+        const itemEl = e.target.closest('.grocery-item');
         const itemId = itemEl.dataset.id;
-        console.log(`item ${itemId} deleted`);
-    }
+        itemEl.remove();
+
+        // check for list length and hide the list if there are no items
+        this.constructor.#removeFromLocalStorage(itemId);
+        this.#outputInfo(`Item ${itemId} has been removed`, 'success');
+        this.#setDefaultState();
+    };
 
     // remove items
 
