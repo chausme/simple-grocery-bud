@@ -219,8 +219,11 @@ class GroceryBud {
             });
         }
         this.#container.classList.remove('visible');
+        this.#appContainer.classList.add('disabled');
         this.#outputInfo('Heads up, your list is empty now', 'error');
-        this.#setDefaultState();
+        setTimeout(() => {
+            this.#setDefaultState();
+        }, 1000);
         localStorage.removeItem('list');
     };
 
