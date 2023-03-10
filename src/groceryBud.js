@@ -1,17 +1,19 @@
 class GroceryBud {
-    #form = document.querySelector('.grocery-form');
+    #appContainer = document.querySelector('.app-container');
+
+    #container = this.#appContainer.querySelector('.grocery-container');
+
+    #list = this.#appContainer.querySelector('.grocery-list');
+
+    #form = this.#appContainer.querySelector('.grocery-form');
 
     #submitBtn = this.#form.querySelector('button');
 
-    #clearBtn = document.querySelector('.clear-btn');
+    #clearBtn = this.#appContainer.querySelector('.clear-btn');
 
     #infoWrap = document.querySelector('.info-wrap');
 
     #info = this.#infoWrap.querySelector('.info');
-
-    #list = document.querySelector('.grocery-list');
-
-    #container = document.querySelector('.grocery-container');
 
     #editId;
 
@@ -27,7 +29,7 @@ class GroceryBud {
         this.#form.addEventListener('submit', e => {
             e.preventDefault();
 
-            this.#submitBtn.setAttribute('disabled', 'disabled');
+            this.#appContainer.classList.add('disabled');
 
             const { action } = e.target.dataset;
             const grocery = this.#getGrocery();
@@ -39,7 +41,9 @@ class GroceryBud {
                 this.#appendListItem(uuid, grocery);
 
                 this.#addToLocalStorage(uuid, grocery);
-                this.#setDefaultState();
+                setTimeout(() => {
+                    this.#setDefaultState();
+                }, 1000);
 
                 this.#outputInfo('Succesfully added grocery item', 'success');
             } else if (grocery && action === 'edit') {
@@ -47,7 +51,9 @@ class GroceryBud {
                     `.grocery-item[data-id="${this.#editId}"] .title`
                 ).textContent = this.#getGrocery();
                 this.#updateInLocalStorage(this.#editId);
-                this.#setDefaultState();
+                setTimeout(() => {
+                    this.#setDefaultState();
+                }, 1000);
                 this.#outputInfo('Succesfully updated grocery item', 'success');
             } else {
                 this.#outputInfo('Oops, the grocery value is empty', 'error');
@@ -196,8 +202,11 @@ class GroceryBud {
             this.#container.classList.remove('visible');
         }
 
+        this.#appContainer.classList.add('disabled');
         this.#outputInfo(`Item ${itemId} has been removed`, 'success');
-        this.#setDefaultState();
+        setTimeout(() => {
+            this.#setDefaultState();
+        }, 1000);
     };
 
     // remove items
@@ -223,6 +232,7 @@ class GroceryBud {
         this.#form.reset();
         this.#form.dataset.action = 'add';
         this.#submitBtn.textContent = 'Submit';
+        this.#appContainer.classList.remove('disabled');
     };
 }
 

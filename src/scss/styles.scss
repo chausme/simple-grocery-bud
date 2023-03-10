@@ -14,10 +14,6 @@ body {
 
 main {
     margin: 80px 0 60px;
-
-    @media screen and (min-width: $screen-md) {
-        margin: 60px 0;
-    }
 }
 
 .info-wrap {
@@ -27,6 +23,7 @@ main {
     opacity: 0;
     visibility: hidden;
     transition: var(--transition);
+    z-index: 9999;
 
     &.active {
         opacity: 1;
@@ -36,6 +33,23 @@ main {
 .info {
     width: 100%;
     text-align: center;
+}
+
+.app-container {
+    &.disabled {
+        pointer-events: none;
+        position: relative;
+        &::after {
+            content: '';
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.5);
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+    }
 }
 
 .grocery-container {
