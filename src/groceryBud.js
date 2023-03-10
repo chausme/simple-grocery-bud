@@ -129,7 +129,7 @@ class GroceryBud {
 
     static #getLocalStorage = () => JSON.parse(localStorage.getItem('list'));
 
-    // create and append list item
+    // create and append a new list item
 
     #appendListItem = (id, name) => {
         const element = document.createElement('article');

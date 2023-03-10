@@ -1,23 +1,29 @@
 {
-  "name": "simple-grocery-bud",
-  "version": "1.0.0",
-  "description": "",
-  "source": "src/index.html",
-  "scripts": {
-    "start": "parcel",
-    "build": "parcel build",
-    "lint": "npx eslint src",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "chausme",
-  "license": "ISC",
-  "devDependencies": {
-    "@parcel/transformer-sass": "^2.8.1",
-    "eslint": "^8.29.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0",
-    "parcel": "^2.8.1",
-    "prettier": "2.8.1"
-  }
+    "name": "simple-grocery-bud",
+    "version": "1.0.0",
+    "description": "📝 Simple todo list app",
+    "source": "src/index.html",
+    "scripts": {
+        "start": "parcel",
+        "build": "parcel build",
+        "lint:scripts": "npx eslint src",
+        "lint:styles": "npx stylelint \"**/*.scss\"",
+        "lint": "npm-run-all lint:scripts lint:styles",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "chausme",
+    "license": "ISC",
+    "devDependencies": {
+        "@parcel/transformer-sass": "^2.8.1",
+        "eslint": "^8.29.0",
+        "eslint-config-airbnb-base": "^15.0.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-import": "^2.26.0",
+        "npm-run-all": "^4.1.5",
+        "parcel": "^2.8.1",
+        "prettier": "2.8.1",
+        "stylelint": "^15.2.0",
+        "stylelint-config-standard": "^30.0.1",
+        "stylelint-config-standard-scss": "^7.0.1"
+    }
 }
