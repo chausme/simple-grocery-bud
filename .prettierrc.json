@@ -17,6 +17,10 @@
             "options": { "parser": "json" }
         },
         {
+            "files": "*.webmanifest",
+            "options": { "parser": "json" }
+        },
+        {
             "files": "*.scss",
             "options": { "parser": "scss", "singleQuote": false }
         },
